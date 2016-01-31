@@ -74,10 +74,7 @@ public class TicketRestController {
     private void createLine(Ticket ticket) {
         Line line = new Line();
         Random r = new Random();
-        int seed = 2 - 0 + 1;
-        line.setFirst(r.nextInt(seed));
-        line.setSecond(r.nextInt(seed));
-        line.setThird(r.nextInt(seed));
+        line.setValues(new Random().ints(3, 0, 3).toArray());
         line.setTicket(ticket);
         ticket.getLines().add(line);
     }
