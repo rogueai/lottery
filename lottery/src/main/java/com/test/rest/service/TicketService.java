@@ -29,8 +29,6 @@ public class TicketService {
         this.modelFactory = modelFactory;
     }
 
-
-
     public Ticket amendTicket(Long ticketId, Optional<Integer> lines) {
         Ticket ticket = validateAndGet(ticketId);
         if (ticket.getStatus() == Ticket.Status.CHECKED) {
