@@ -27,68 +27,38 @@ import java.util.stream.IntStream;
 @RestController
 public class TicketRestController {
 
-    private static final Logger log = LoggerFactory.getLogger(TicketRestController.class);
-
     public static final String DEFAULT_LINES = "3";
-    private final TicketRepository ticketRepository;
+    private static final Logger log = LoggerFactory.getLogger(TicketRestController.class);
+    private final TicketService ticketService;
 
     @Autowired
-    public TicketRestController(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
+    public TicketRestController(TicketService ticketService) {
+        this.ticketService = ticketService;
     }
 
     @JsonView(View.Basic.class)
     @RequestMapping(value = "/ticket/{ticketId}", method = RequestMethod.GET)
     public Ticket getTicket(@PathVariable Long ticketId) {
-        return this.validateAndGet(ticketId);
+        return ticketService.getTicket(ticketId);
     }
 
     @JsonView(View.Basic.class)
     @RequestMapping(value = "/ticket/{ticketId}", method = RequestMethod.PUT)
-    public Ticket amendTicket(@PathVariable Long ticketId, @RequestParam(value = "lines", defaultValue = DEFAULT_LINES) Integer lines) {
-        this.validateAndGet(ticketId);
-        Ticket ticket = this.ticketRepository.findOne(ticketId);
-        if (ticket.getStatus() == Status.CHECKED) {
-            throw new AmendNotAllowedException(ticket.getId());
-        }
-        if (lines != null) {
-            for (int i = 0; i < lines; i++) {
-                createLine(ticket);
-            }
-        }
-        ticketRepository.save(ticket);
+    public Ticket amendTicket(@PathVariable Long ticketId, @RequestParam(value = "lines", defaultValue = DEFAULT_LINES) Optional<Integer> lines) {
+        Ticket ticket = ticketService.amendTicket(ticketId, lines);
         return ticket;
     }
 
     @RequestMapping(value = "/status/{ticketId}", method = RequestMethod.PUT)
     public Ticket checkTicket(@PathVariable Long ticketId) {
-        this.validateAndGet(ticketId);
-        Ticket ticket = this.ticketRepository.findOne(ticketId);
-        ticket.setStatus(Status.CHECKED);
-        ticketRepository.save(ticket);
-        return ticket;
+        return ticketService.checkTicket(ticketId);
     }
-
-//    @JsonView(View.Basic.class)
-//    @RequestMapping(value = "/ticket", method = RequestMethod.POST)
-//    public Ticket createTicket(@RequestParam(value = "lines", defaultValue = DEFAULT_LINES) Optional<Integer> lines) {
-//        Ticket ticket = new Ticket();
-//        lines.ifPresent(integer -> {
-//            for (int i = 0; i < integer; i++) {
-//                createLine(ticket);
-//            }
-//        });
-//        return this.ticketRepository.save(ticket);
-//    }
 
     @RequestMapping(value = "/ticket", method = RequestMethod.POST)
     ResponseEntity<?> createTicket(@RequestParam(value = "lines", defaultValue = DEFAULT_LINES) Optional<Integer> lines) {
 
-        Ticket ticket = new Ticket();
-        lines.ifPresent(value ->
-                IntStream.range(0, value).forEach(i -> createLine(ticket))
-        );
-        ticketRepository.save(ticket);
+        Ticket ticket = ticketService.createTicket(lines);
+
         HttpHeaders httpHeaders = new HttpHeaders();
 
         URI ticketUri = ServletUriComponentsBuilder
@@ -99,40 +69,10 @@ public class TicketRestController {
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
     }
 
-    private void createLine(Ticket ticket) {
-        Line line = new Line();
-        line.setValues(new Random().ints(3, 0, 3).toArray());
-        line.setOutcome(calculateOutcome(line));
-        line.setTicket(ticket);
-        ticket.getLines().add(line);
-    }
-
-    private int calculateOutcome(Line line) {
-        int[] values = line.getValues();
-        int sum = Arrays.stream(values).sum();
-        if (sum == 2) {
-            return 10;
-        }
-        boolean allMatch = Arrays.stream(values).allMatch(s -> s == values[0]);
-        if (allMatch) {
-            return 5;
-        }
-        boolean firstDiffers = IntStream.range(1, values.length).map(i -> values[i]).noneMatch(s -> s == values[0]);
-        if (firstDiffers) {
-            return 1;
-        }
-        return 0;
-    }
-
     @JsonView(View.Basic.class)
     @RequestMapping(value = "/ticket", method = RequestMethod.GET)
     public List<Ticket> getTickets() {
-        log.debug("retrieved all tickets");
-        return this.ticketRepository.findAll();
+        return ticketService.getTickets();
     }
 
-    private Ticket validateAndGet(Long ticketId) {
-        Optional<Ticket> optional = Optional.ofNullable(this.ticketRepository.findOne(ticketId));
-        return optional.orElseThrow(() -> new TicketNotFoundException(ticketId));
-    }
 }
