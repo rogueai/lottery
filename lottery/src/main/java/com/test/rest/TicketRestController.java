@@ -1,10 +1,8 @@
 package com.test.rest;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.test.model.Line;
-import com.test.model.Status;
 import com.test.model.Ticket;
-import com.test.repository.TicketRepository;
+import com.test.rest.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.stream.IntStream;
 
 /**
  * @author Massimo Zugno <d3k41n@gmail.com>
