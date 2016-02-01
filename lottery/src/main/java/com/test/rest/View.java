@@ -5,7 +5,7 @@ package com.test.rest;
  */
 public class View {
 
-    public interface New {
+    public interface Basic {
     }
 
 }

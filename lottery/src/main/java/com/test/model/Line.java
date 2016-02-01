@@ -23,6 +23,8 @@ public class Line {
 
     private int[] values = new int[3];
 
+    private Integer outcome;
+
     @JsonIgnore
     @ManyToOne
     private Ticket ticket;
@@ -54,19 +56,11 @@ public class Line {
         this.values = values;
     }
 
-    public int getOutcome() {
-        int sum = Arrays.stream(values).sum();
-        if (sum == 2) {
-            return 10;
-        }
-        boolean allMatch = Arrays.stream(values).allMatch(s -> s == values[0]);
-        if (allMatch) {
-            return 5;
-        }
-        boolean firstDiffers = IntStream.range(1, values.length).map(i -> values[i]).noneMatch(s -> s == values[0]);
-        if (firstDiffers) {
-            return 1;
-        }
-        return 0;
+    public Integer getOutcome() {
+        return outcome;
+    }
+
+    public void setOutcome(Integer outcome) {
+        this.outcome = outcome;
     }
 }

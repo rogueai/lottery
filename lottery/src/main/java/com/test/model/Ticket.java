@@ -1,6 +1,5 @@
 package com.test.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.test.rest.View;
 
@@ -16,14 +15,15 @@ public class Ticket {
 
     @Id
     @GeneratedValue
-    @JsonView(View.New.class)
+    @JsonView(View.Basic.class)
     private Long id;
 
-    @JsonView(View.New.class)
+    @JsonView(View.Basic.class)
     @Enumerated()
     private Status status = Status.NEW;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("outcome desc")
     private List<Line> lines = new ArrayList<>();
 
     public Ticket() {
@@ -37,7 +37,7 @@ public class Ticket {
         this.id = id;
     }
 
-    @JsonView(View.New.class)
+    @JsonView(View.Basic.class)
     public Integer getLinesCount() {
         return lines.size();
     }
