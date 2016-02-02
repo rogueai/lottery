@@ -10,6 +10,7 @@ import java.util.Optional;
  * @author Massimo Zugno <d3k41n@gmail.com>
  */
 public interface TicketService {
+
     /**
      * Add additional lines to the ticket. If the ticket's status is {@link com.test.model.Ticket.Status#CHECKED},
      * no lines can be added and a {@link AmendNotAllowedException} is thrown.

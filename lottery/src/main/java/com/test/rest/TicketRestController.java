@@ -53,7 +53,6 @@ public class TicketRestController {
 
     @RequestMapping(value = "/ticket", method = RequestMethod.POST)
     public ResponseEntity<?> createTicket(@RequestParam(value = "lines", defaultValue = DEFAULT_LINES) Optional<Integer> lines) {
-
         Ticket ticket = ticketService.createTicket(lines);
 
         HttpHeaders httpHeaders = new HttpHeaders();

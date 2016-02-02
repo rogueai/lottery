@@ -2,14 +2,12 @@ package com.test.rest.service;
 
 import com.test.LotteryApplication;
 import com.test.model.Ticket;
-import com.test.repository.TicketRepository;
 import com.test.rest.exception.AmendNotAllowedException;
 import com.test.rest.exception.TicketNotFoundException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -35,9 +33,6 @@ public class TicketServiceTest {
     @Autowired
     private TicketService ticketService;
 
-    @Autowired
-    private TicketRepository ticketRepository;
-
     @Test
     public void ticketLinesOrder() {
         final Ticket ticket = ticketService.createTicket(Optional.of(3));
@@ -47,8 +42,6 @@ public class TicketServiceTest {
         );
 
         ticketService.save(ticket);
-
-        ticketRepository.flush();
 
         Ticket one = ticketService.getTicket(ticket.getId());
 
@@ -91,6 +84,7 @@ public class TicketServiceTest {
         exception.expect(AmendNotAllowedException.class);
         Ticket ticket = ticketService.createTicket(Optional.of(1));
         ticket.setStatus(Ticket.Status.CHECKED);
+        ticketService.save(ticket);
         ticketService.amendTicket(ticket.getId(), Optional.of(1));
     }
 

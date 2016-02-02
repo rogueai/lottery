@@ -2,7 +2,9 @@ package com.test.rest;
 
 import com.test.LotteryApplication;
 import com.test.model.Ticket;
+import com.test.repository.TicketRepository;
 import com.test.rest.service.TicketService;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +38,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = LotteryApplication.class)
-@Transactional
 @WebAppConfiguration
 public class TicketRestControllerTest {
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -52,6 +53,14 @@ public class TicketRestControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    @After
+    public void after() {
+        ticketRepository.deleteAll();
+    }
 
     @Autowired
     void setConverters(HttpMessageConverter<?>[] converters) {

@@ -20,8 +20,8 @@ import java.util.stream.IntStream;
 /**
  * @author Massimo Zugno <d3k41n@gmail.com>
  */
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class TicketServiceImpl implements TicketService {
 
     private static Logger logger = LoggerFactory.getLogger(TicketServiceImpl.class);
@@ -50,12 +50,14 @@ public class TicketServiceImpl implements TicketService {
         return ticketRepository.save(ticket);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Ticket getTicket(Long ticketId) {
         logger.debug("Retrieving ticket with id {}", ticketId);
         return validateAndGet(ticketId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Ticket> getTickets() {
         List<Ticket> tickets = ticketRepository.findAll();
@@ -88,4 +90,5 @@ public class TicketServiceImpl implements TicketService {
         Optional<Ticket> optional = Optional.ofNullable(this.ticketRepository.findOne(ticketId));
         return optional.orElseThrow(() -> new TicketNotFoundException(ticketId));
     }
+
 }
