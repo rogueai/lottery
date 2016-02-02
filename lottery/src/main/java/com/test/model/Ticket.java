@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A {@link Ticket} represented by a {@link Status} and a collection of {@link Line}s with outcomes. A ticket is created
+ * with a number of lines, that can be <em>amended</em> with additional ones.
+ * Whenever a ticket is requested for its status, the ticket becomes {@link Status#CHECKED} and cannot be amended anymore.
+ *
  * @author Massimo Zugno <d3k41n@gmail.com>
  */
 @Entity

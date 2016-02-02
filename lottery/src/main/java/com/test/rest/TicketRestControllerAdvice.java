@@ -2,6 +2,7 @@ package com.test.rest;
 
 import com.test.rest.exception.AmendNotAllowedException;
 import com.test.rest.exception.TicketNotFoundException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,11 @@ public class TicketRestControllerAdvice {
     @ExceptionHandler(AmendNotAllowedException.class)
     public void amendNotAllowedExceptionExceptionHandler(HttpServletResponse response, AmendNotAllowedException e) throws IOException {
         sendError(HttpStatus.METHOD_NOT_ALLOWED, response, e);
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public void invalidDataAccessApiUsageExceptionHandler(HttpServletResponse response, InvalidDataAccessApiUsageException e) throws IOException {
+        sendError(HttpStatus.INTERNAL_SERVER_ERROR, response, e);
     }
 
     private void sendError(HttpStatus status, HttpServletResponse response, Throwable e) throws IOException {

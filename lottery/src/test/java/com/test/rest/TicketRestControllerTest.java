@@ -1,19 +1,13 @@
 package com.test.rest;
 
 import com.test.LotteryApplication;
-import com.test.model.Line;
-import com.test.model.TicketModelfactory;
 import com.test.model.Ticket;
-import com.test.repository.TicketRepository;
 import com.test.rest.service.TicketService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;

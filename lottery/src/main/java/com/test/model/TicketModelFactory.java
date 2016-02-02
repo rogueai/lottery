@@ -1,5 +1,7 @@
 package com.test.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -8,10 +10,14 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 /**
+ * Factory responsible of creating domain model objects.
+ *
  * @author Massimo Zugno <d3k41n@gmail.com>
  */
 @Component
-public class TicketModelfactory {
+public class TicketModelFactory {
+
+    private static Logger logger = LoggerFactory.getLogger(TicketModelFactory.class);
 
     public Ticket createTicket(Optional<Integer> lines) {
         Ticket ticket = new Ticket();
@@ -21,14 +27,20 @@ public class TicketModelfactory {
         return ticket;
     }
 
-    public Line createLine(Ticket ticket) {
+    /**
+     * Creates a {@link Line} and set the correct parent-child relationships.
+     *
+     * @param ticket
+     */
+    public void createLine(Ticket ticket) {
 
         Line line = new Line();
         line.setValues(new Random().ints(3, 0, 3).toArray());
-        line.setOutcome(calculateOutcome(line));
+        int outcome = calculateOutcome(line);
+        logger.debug("Created line with random values: {} - calculated outcome:", line.getValues(), outcome);
+        line.setOutcome(outcome);
         line.setTicket(ticket);
         ticket.getLines().add(line);
-        return line;
     }
 
     protected int calculateOutcome(Line line) {

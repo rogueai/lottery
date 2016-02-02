@@ -12,6 +12,16 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 /**
+ * A {@link Line} contains three randomly-generated values. Each value can have a value of <em>0</em>, <em>1</em> or <em>2</em>.
+ * <p/>
+ * Based on the three values, an outcome for the line is calculated following these rules:
+ * <ul>
+ * <li>if the sum of the values is 2, the result is 10</li>
+ * <li>if the values are all the same, the result is 5</li>
+ * <li>if the second and the third values are different from the first, the result is 1</li>
+ * <li>in all the other cases, the result is 0</li>
+ * </ul>
+ *
  * @author Massimo Zugno <d3k41n@gmail.com>
  */
 @Entity

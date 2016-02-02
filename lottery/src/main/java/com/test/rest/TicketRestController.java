@@ -22,6 +22,8 @@ import java.util.Optional;
 @RestController
 public class TicketRestController {
 
+    private static Logger logger = LoggerFactory.getLogger(TicketRestController.class);
+
     public static final String DEFAULT_LINES = "3";
     private static final Logger log = LoggerFactory.getLogger(TicketRestController.class);
     private final TicketService ticketService;
@@ -50,7 +52,7 @@ public class TicketRestController {
     }
 
     @RequestMapping(value = "/ticket", method = RequestMethod.POST)
-    ResponseEntity<?> createTicket(@RequestParam(value = "lines", defaultValue = DEFAULT_LINES) Optional<Integer> lines) {
+    public ResponseEntity<?> createTicket(@RequestParam(value = "lines", defaultValue = DEFAULT_LINES) Optional<Integer> lines) {
 
         Ticket ticket = ticketService.createTicket(lines);
 
@@ -60,7 +62,7 @@ public class TicketRestController {
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(ticket.getId()).toUri();
         httpHeaders.setLocation(ticketUri);
-
+        logger.debug("Creating new ticket with location: {}", ticketUri);
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
     }
 
