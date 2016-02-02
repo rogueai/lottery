@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author Massimo Zugno <d3k41n@gmail.com>
  */
 @ControllerAdvice
-public class TicketRestControllerAdvice {
+class TicketRestControllerAdvice {
 
     /**
      * Thrown by the service layer when trying to retrieve a ticket and passing an empty or wrong id.

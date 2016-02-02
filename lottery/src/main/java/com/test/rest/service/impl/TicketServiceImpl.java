@@ -49,9 +49,7 @@ public class TicketServiceImpl implements TicketService {
             throw new AmendNotAllowedException(ticketId);
         }
         lines.ifPresent(value ->
-                IntStream.range(0, value).forEach(i -> {
-                    modelFactory.createLine(ticket);
-                })
+                IntStream.range(0, value).forEach(i -> modelFactory.createLine(ticket))
         );
         return saveTicket(ticket);
     }
@@ -98,7 +96,7 @@ public class TicketServiceImpl implements TicketService {
         return ticket;
     }
 
-    Ticket validateAndGet(Long ticketId) {
+    private Ticket validateAndGet(Long ticketId) {
         Optional<Ticket> optional = Optional.ofNullable(this.ticketRepository.findOne(ticketId));
         return optional.orElseThrow(() -> new TicketNotFoundException(ticketId));
     }

@@ -24,7 +24,7 @@ public class TicketModelFactoryTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Autowired
-    TicketModelFactory factory;
+    private TicketModelFactory factory;
 
     @Test
     public void calculateOutcome_nullLine() throws Exception {

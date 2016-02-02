@@ -19,9 +19,9 @@ import java.util.stream.IntStream;
 @Component
 public class TicketModelFactory {
 
-    public static final int LINE_SIZE = 3;
-    public static final int LINE_VALUE_MIN = 0;
-    public static final int LINE_VALUE_MAX = 2;
+    private static final int LINE_SIZE = 3;
+    private static final int LINE_VALUE_MIN = 0;
+    private static final int LINE_VALUE_MAX = 2;
 
     private static Logger logger = LoggerFactory.getLogger(TicketModelFactory.class);
 
@@ -39,7 +39,7 @@ public class TicketModelFactory {
     /**
      * Creates a {@link Line} and set the correct parent-child relationships.
      *
-     * @param ticket
+     * @param ticket the parent ticket
      */
     public Line createLine(Ticket ticket) {
 
@@ -60,7 +60,7 @@ public class TicketModelFactory {
         return line;
     }
 
-    protected int calculateOutcome(Line line) {
+    int calculateOutcome(Line line) {
         Assert.notNull(line);
         Assert.notNull(line.getValues());
         int[] values = line.getValues();

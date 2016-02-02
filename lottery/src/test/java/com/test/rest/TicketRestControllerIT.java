@@ -4,7 +4,6 @@ import com.test.LotteryApplication;
 import com.test.model.Ticket;
 import com.test.repository.TicketRepository;
 import com.test.rest.service.TicketService;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
@@ -132,7 +130,7 @@ public class TicketRestControllerIT {
      */
     @Test
     public void getTickets_linesNotSerialized() throws Exception {
-        Ticket ticket = ticketService.createTicket(Optional.empty());
+        ticketService.createTicket(Optional.empty());
         mockMvc.perform(get("/ticket").contentType(contentType))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -313,7 +311,7 @@ public class TicketRestControllerIT {
                 .andExpect(jsonPath("$", hasSize(2)));
     }
 
-    protected String toJson(Object o) throws IOException {
+    private String toJson(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
         httpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
         return mockHttpOutputMessage.getBodyAsString();

@@ -1,15 +1,11 @@
 package com.test.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.test.rest.View;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.util.Arrays;
-import java.util.stream.IntStream;
 
 /**
  * A {@link Line} contains three randomly-generated values. Each value can have a value of <em>0</em>, <em>1</em> or <em>2</em>.

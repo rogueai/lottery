@@ -75,7 +75,7 @@ public class TicketServiceTest {
     @Test
     public void getTicket_notFound() throws Exception {
         exception.expect(TicketNotFoundException.class);
-        ticketService.getTicket(0l);
+        ticketService.getTicket(0L);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class TicketServiceTest {
     }
 
     @Test
-    public void chekTicket() throws Exception {
+    public void checkTicket() throws Exception {
         Ticket ticket = ticketService.createTicket(Optional.of(1));
         ticket = ticketService.checkTicket(ticket.getId());
         assertNotNull(ticket);

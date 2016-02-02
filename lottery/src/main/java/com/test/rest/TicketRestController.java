@@ -42,8 +42,7 @@ public class TicketRestController {
     @JsonView(View.Basic.class)
     @RequestMapping(value = "/ticket/{ticketId}", method = RequestMethod.PUT)
     public Ticket amendTicket(@PathVariable Long ticketId, @RequestParam(value = "lines", defaultValue = DEFAULT_LINES) Optional<Integer> lines) {
-        Ticket ticket = ticketService.amendTicket(ticketId, lines);
-        return ticket;
+        return ticketService.amendTicket(ticketId, lines);
     }
 
     @RequestMapping(value = "/status/{ticketId}", method = RequestMethod.PUT)
