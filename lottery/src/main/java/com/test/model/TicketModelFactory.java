@@ -37,7 +37,7 @@ public class TicketModelFactory {
         Line line = new Line();
         line.setValues(new Random().ints(3, 0, 3).toArray());
         int outcome = calculateOutcome(line);
-        logger.debug("Created line with random values: {} - calculated outcome:", line.getValues(), outcome);
+        logger.debug("Created line with random values: {} - calculated outcome: {}", line.getValues(), outcome);
         line.setOutcome(outcome);
         line.setTicket(ticket);
         ticket.getLines().add(line);

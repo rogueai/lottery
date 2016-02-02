@@ -9,13 +9,12 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.stream.IntStream;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(LotteryApplication.class)
-@Transactional(isolation = Isolation.READ_UNCOMMITTED)
+@Transactional
 public class TicketServiceTest {
 
     @Rule
@@ -36,20 +35,28 @@ public class TicketServiceTest {
     @Autowired
     private TicketService ticketService;
 
-//    @Test
-//    public void ticketLinesOrder() {
-//        final Ticket ticket = ticketService.createTicket(Optional.of(3));
-//        // overwrite lines outcome
-//        IntStream.range(0, ticket.getLines().size()).forEach(i ->
-//                ticket.getLines().get(i).setOutcome(i)
-//        );
-//        ticketService.save(ticket);
-//        Ticket one = ticketService.getTicket(ticket.getId());
-//        Assert.assertEquals(3, one.getLines().size());
-//        Assert.assertEquals(2, one.getLines().get(0).getOutcome().intValue());
-//        Assert.assertEquals(1, one.getLines().get(1).getOutcome().intValue());
-//        Assert.assertEquals(0, one.getLines().get(2).getOutcome().intValue());
-//    }
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    @Test
+    public void ticketLinesOrder() {
+        final Ticket ticket = ticketService.createTicket(Optional.of(3));
+        // overwrite lines outcome
+        IntStream.range(0, ticket.getLines().size()).forEach(i ->
+                ticket.getLines().get(i).setOutcome(i)
+        );
+
+        ticketService.save(ticket);
+
+        ticketRepository.flush();
+
+        Ticket one = ticketService.getTicket(ticket.getId());
+
+        Assert.assertEquals(3, one.getLines().size());
+        Assert.assertEquals(2, one.getLines().get(0).getOutcome().intValue());
+        Assert.assertEquals(1, one.getLines().get(1).getOutcome().intValue());
+        Assert.assertEquals(0, one.getLines().get(2).getOutcome().intValue());
+    }
 
     @Test
     public void getTicket_null() {
