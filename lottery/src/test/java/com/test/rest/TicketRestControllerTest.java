@@ -57,8 +57,8 @@ public class TicketRestControllerTest {
     @Autowired
     private TicketRepository ticketRepository;
 
-    @After
-    public void after() {
+    @Before
+    public void before() {
         ticketRepository.deleteAll();
     }
 

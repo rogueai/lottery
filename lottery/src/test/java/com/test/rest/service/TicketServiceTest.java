@@ -2,11 +2,10 @@ package com.test.rest.service;
 
 import com.test.LotteryApplication;
 import com.test.model.Ticket;
+import com.test.repository.TicketRepository;
 import com.test.rest.exception.AmendNotAllowedException;
 import com.test.rest.exception.TicketNotFoundException;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,15 @@ public class TicketServiceTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Autowired
+    private TicketRepository ticketRepository;
+
+    @Autowired
     private TicketService ticketService;
+
+    @Before
+    public void before() {
+        ticketRepository.deleteAll();
+    }
 
     @Test
     public void ticketLinesOrder() {
