@@ -31,7 +31,7 @@ public class Line {
     @GeneratedValue
     private Long id;
 
-    private int[] values = new int[3];
+    private int[] values;
 
     private Integer outcome;
 

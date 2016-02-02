@@ -53,5 +53,10 @@ public interface TicketService {
      */
     Ticket createTicket(Optional<Integer> lines);
 
-    Ticket save(Ticket ticket);
+    /**
+     * Persist the passed {@link Ticket}
+     * @param ticket the ticket to be saved
+     * @return the saved ticket
+     */
+    Ticket saveTicket(Ticket ticket);
 }

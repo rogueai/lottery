@@ -5,6 +5,7 @@ import com.test.model.TicketModelFactory;
 import com.test.repository.TicketRepository;
 import com.test.rest.exception.AmendNotAllowedException;
 import com.test.rest.exception.TicketNotFoundException;
+import com.test.rest.exception.TicketPersistException;
 import com.test.rest.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
+ * Service responsible of accessing the {@link TicketRepository} in a transactional way.
+ * The service abstract the logic of creating new entities and accessing the database so
+ * that the controller doesn't know about the persistence layer.
+ *
  * @author Massimo Zugno <d3k41n@gmail.com>
  */
 @Service
@@ -47,7 +53,7 @@ public class TicketServiceImpl implements TicketService {
                     modelFactory.createLine(ticket);
                 })
         );
-        return ticketRepository.save(ticket);
+        return saveTicket(ticket);
     }
 
     @Transactional(readOnly = true)
@@ -70,23 +76,29 @@ public class TicketServiceImpl implements TicketService {
         logger.debug("Checking status of ticket with id {}", ticketId);
         Ticket ticket = validateAndGet(ticketId);
         ticket.setStatus(Ticket.Status.CHECKED);
-        return ticketRepository.save(ticket);
+        return saveTicket(ticket);
     }
 
     @Override
     public Ticket createTicket(Optional<Integer> lines) {
         Ticket ticket = modelFactory.createTicket(lines);
-        ticket = ticketRepository.save(ticket);
+        ticket = saveTicket(ticket);
         logger.debug("Created new ticket with id {}", ticket.getId());
         return ticket;
     }
 
     @Override
-    public Ticket save(Ticket ticket) {
-        return ticketRepository.save(ticket);
+    public Ticket saveTicket(Ticket ticket) {
+        Assert.notNull(ticket, "Cannot save ticket: null");
+        try {
+            ticket = ticketRepository.save(ticket);
+        } catch (Exception e) {
+            throw new TicketPersistException(e);
+        }
+        return ticket;
     }
 
-    private Ticket validateAndGet(Long ticketId) {
+    Ticket validateAndGet(Long ticketId) {
         Optional<Ticket> optional = Optional.ofNullable(this.ticketRepository.findOne(ticketId));
         return optional.orElseThrow(() -> new TicketNotFoundException(ticketId));
     }
