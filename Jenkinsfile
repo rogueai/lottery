@@ -5,4 +5,6 @@ node {
   checkout scm
 
   stage 'Build'
+  
+  run "echo 'Hello'"
 }
